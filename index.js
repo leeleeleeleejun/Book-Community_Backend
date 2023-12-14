@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import memoRoutes from "./routes/memoRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import cookieParser from "cookie-parser";
+import path from "path";
 
 dotenv.config();
 
@@ -12,8 +12,14 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(cookieParser());
 app.use("/userimg", express.static("uploads"));
+// 정적 파일 제공 (build 폴더 내부의 파일들을 클라이언트에게 제공)
+app.use(express.static(path.join(__dirname, "build")));
+
+// 모든 경로에 대해 index.html 반환
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 mongoose.connect(process.env.DB_KEY, {
   useNewUrlParser: true,
