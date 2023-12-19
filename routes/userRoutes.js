@@ -10,19 +10,8 @@ import multer from "multer";
 
 const router = Router();
 
-const storage = multer.diskStorage({
-  // 저장 폴더 위치
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  //파일이름
-  filename: (req, file, cb) => {
-    cb(null, "profile_" + req.user.userId + ".jpg");
-  },
-});
-
-export const multerUpload = multer({
-  storage: storage,
+const multerUpload = multer({
+  storage: multer.memoryStorage(),
 });
 
 // 사용자 생성 라우트
@@ -38,6 +27,7 @@ router.get(
   UserController.getUserInfoAPI
 );
 router.put("/user", authenticateToken, UserController.editUserInfoAPI);
+
 router.put(
   "/userimg",
   authenticateToken,
