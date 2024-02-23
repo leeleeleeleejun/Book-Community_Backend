@@ -61,8 +61,6 @@ export const checkNewWeek = async (req, res, next) => {
   if (!isSameDate(lastWeek, startOfCurrentWeek)) {
     // 현재 주의 시작 날짜와 마지막 주의 날짜의 차이 계산
     const dayDifference = differenceInDays(lastWeek, startOfCurrentWeek);
-    console.log(lastWeek, startOfCurrentWeek, dayDifference);
-
     const weekDifference = Math.floor(dayDifference / 7);
     for (let i = 1; i <= weekDifference; i++) {
       const newWeekStartDate = new Date(lastWeek);

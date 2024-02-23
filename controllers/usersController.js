@@ -223,7 +223,7 @@ export const pushReadTimeAPI = async (req, res) => {
 
     await existingUser.save();
 
-    res.json({ message: ERROR_MESSAGES.RECORD_SAVED });
+    res.json({ message: SUCCESS_MESSAGES.RECORD_SAVED });
   } catch (error) {
     res.status(500).json({ error: "서버 오류로 데이터 저장에 실패했습니다." });
   }
