@@ -58,9 +58,11 @@ export const checkNewWeek = async (req, res, next) => {
   const startOfCurrentWeek = new Date(today);
   startOfCurrentWeek.setDate(today.getDate() - today.getDay());
 
-  if (lastWeek.getDate() !== startOfCurrentWeek.getDate()) {
+  if (!isSameDate(lastWeek, startOfCurrentWeek)) {
     // 현재 주의 시작 날짜와 마지막 주의 날짜의 차이 계산
-    const dayDifference = startOfCurrentWeek.getDate() - lastWeek.getDate();
+    const dayDifference = differenceInDays(lastWeek, startOfCurrentWeek);
+    console.log(lastWeek, startOfCurrentWeek, dayDifference);
+
     const weekDifference = Math.floor(dayDifference / 7);
     for (let i = 1; i <= weekDifference; i++) {
       const newWeekStartDate = new Date(lastWeek);
@@ -79,4 +81,26 @@ export const checkNewWeek = async (req, res, next) => {
   }
 
   next();
+};
+
+const isSameDate = (date1, date2) => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+};
+
+const differenceInDays = (startDate, endDate) => {
+  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+  const startTimestamp = startDate.getTime();
+  const endTimestamp = endDate.getTime();
+
+  // 종료일의 타임스탬프에서 시작일의 타임스탬프를 빼서 일수를 구합니다.
+  const differenceInMilliseconds = endTimestamp - startTimestamp;
+  const differenceInDays = Math.round(
+    differenceInMilliseconds / millisecondsPerDay
+  );
+
+  return differenceInDays;
 };
